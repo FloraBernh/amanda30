@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amanda fyller 30!</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 30%, #fdfcfb 50%, #fecfef 70%, #ff9a9e 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            padding: 20px;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glitter particles */
+        .sparkle {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkleFloat linear infinite;
+        }
+
+        @keyframes sparkleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) rotate(36deg) scale(1);
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .sparkle::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            filter: blur(1px);
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            color: #d4337a;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 10px rgba(212, 51, 122, 0.2);
+        }
+
+        .subtitle {
+            font-size: clamp(0.95rem, 2.8vw, 1.15rem);
+            color: #b8396b;
+            margin-bottom: 40px;
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: btnGlow 3s ease infinite;
+            border: none;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(1rem, 2.8vw, 1.25rem);
+            font-weight: 600;
+            padding: 20px 50px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(240, 147, 251, 0.4), 0 0 60px rgba(245, 87, 108, 0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.01em;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(240, 147, 251, 0.5), 0 0 80px rgba(245, 87, 108, 0.2);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        @keyframes btnGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 70%
+            );
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(25deg); }
+            100% { transform: translateX(100%) rotate(25deg); }
+        }
+
+        .result {
+            margin-top: 40px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-text {
+            font-size: clamp(1.05rem, 3.2vw, 1.35rem);
+            color: #c2185b;
+            font-weight: 600;
+            line-height: 1.7;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 24px 32px;
+            border-radius: 20px;
+            border: 2px solid rgba(212, 51, 122, 0.15);
+            box-shadow: 0 4px 20px rgba(212, 51, 122, 0.1);
+        }
+
+        .result-text.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Confetti burst */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) rotate(720deg) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .heart-deco {
+            position: fixed;
+            font-size: 20px;
+            opacity: 0.15;
+            pointer-events: none;
+            animation: heartFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes heartFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Amanda fyller 30.</h1>
+        <p class="subtitle">
+            Ja, det händer. Och nej, det är inte slutet — det är en uppgradering.<br>
+            Tryck på knappen. Varje gång får du en ny anledning att faktiskt se fram emot det här.
+        </p>
+        <button class="btn" onclick="showReason()">Övertyga mig</button>
+        <div class="result">
+            <p class="result-text" id="reasonText"></p>
+        </div>
+    </div>
+
+    <script>
+        const reasons = [
+            "Du slutar bry dig om vad folk tycker. Och det är ärligt talat en superkraft.",
+            "Ditt självförtroende? Det har ALLTID suttit. Men nu sitter det ännu hårdare.",
+            "Du vet vilka vänner som faktiskt räknas. De som firar dig idag? Exakt de.",
+            "Du har lärt dig säga nej utan att be om ursäkt. Det är en flex folk underskattar.",
+            "Tjugoåringarna ser upp till dig. Du märker det inte, men det gör de.",
+            "Du vet exakt vad du vill ha på dig. Inga fler panikköp 16:00 innan fest.",
+            "Du behöver inte låtsas gilla saker längre. Inte vin, inte musik, inte folk. Frihet.",
+            "Alla säger att 30 är när man faktiskt börjar leva. Och de har rätt.",
+            "Du investerar i dig själv nu — hudvård, bra mat, saker som håller. Det är inte lyx, det är standard.",
+            "Drama? Inte din grej längre. Du har varken tid eller intresse. Perfekt.",
+            "Du vet vad du vill ha i kärleken. Lång, snygg, vältränad — du sänker inte ribban. Bra.",
+            "Din smak i vin har gått från 'billigast på menyn' till 'jag VET vad jag gillar'.",
+            "Folk tar dig på allvar nu. 30 är automatisk auktoritet, det bara är så.",
+            "Du har överlevt hela dina 20-årsår. HELA. Du är ostoppbar.",
+            "Du har slutat jämföra dig med andra. Din resa, dina regler.",
+            "Din intuition är vassare än någonsin. Du känner på dig saker — och du har rätt.",
+            "Hemma hos dig ser det alltid ut som en inredningstidning. Det är din grej och den är stark.",
+            "Kvalitet över kvantitet i allt — vänner, kläder, upplevelser, relationer. Inga kompromisser.",
+            "Du har hittat din gräns för hur mycket kaos du accepterar. Den gränsen? Sund som fan.",
+            "Vid 30 slutar man springa efter saker. Man attraherar dem. Det passar dig perfekt.",
+            "Din humor har blivit torrare med åren. Det är som vin — bara bättre.",
+            "Du behöver inte bevisa något för någon längre. Du vet vad du går för. Punkt.",
+            "Forskning visar att folk blir lyckligare efter 30. Vetenskap, inte åsikt.",
+            "Vila är inte lathet. Det är sunt förnuft. Och vid 30 fattar man äntligen det.",
+            "Ditt nätverk av riktiga människor har aldrig varit starkare.",
+            "Du vet skillnaden mellan vad du behöver och vad du vill ha. Det är ovanligt.",
+            "Fredagskväll i soffan > uteställe med folk du inte gillar. Och det är HELT okej.",
+            "30 är början på ditt bästa kapitel. Inte slutet på något — början.",
+            "Du klarar allt du bestämmer dig för. Det har du redan bevisat. 30 är bara bonus.",
+            "Du strålar inifrån på ett annat sätt nu. Det syns på riktigt.",
+            "Du är inte 'gammal'. Du är uppgraderad.",
+            "Amanda vid 30 > Amanda vid 20. Det är inte ens en diskussion.",
+            // Amanda-specifika
+            "Du har precis flyttat tillbaka till Västerås men vi vet båda att Stockholm väntar. Vasastan, vi kommer.",
+            "Du är den vännen som ställer upp i vått och torrt. Alla som känner dig vet det. Det är din superkraft.",
+            "Du har städat hos Flora. Frivilligt. Flera gånger. Det säger ALLT om vad du är för människa.",
+            "Killar är lite rädda för dig. Det är för att du har koll och de inte har det.",
+            "Du och Flora ska bli grannar i Stockholm. Det är inte en dröm, det är en plan.",
+            "Du har autism-energin, Flora har adhd-energin. Därför funkar ni. Vetenskapen stödjer detta (typ).",
+            "Du har ordning och reda i ALLT. Resten av oss försöker desperat hänga med.",
+            "Du har börjat ett nytt jobb som är tufft — och du äger det. Som vanligt.",
+            "Har du bestämt dig för något så blir det så. Ingen kraft i universum stoppar dig.",
+            "Du ger aldrig upp. Aldrig. Det är inte en egenskap, det är hela din personlighet.",
+            "Lägenhet i Vasastan och en lång snygg kille — vid 30 vet man vad man vill ha. Du kommer få båda.",
+            "Dina föräldrar är världens bästa hejarklack. Västerås-basen sitter.",
+            "Flora, Frida och Therese — vi kommer ALLTID finnas vid din sida. Oavsett stad, oavsett ålder.",
+            "Du är typen som får andra att känna sig sedda. Det är sällsynt. Och det blir bara starkare med åren.",
+            "Stockholm vet inte vad som väntar. Men vi vet. Amanda 30 i Vasastan — det är bara en tidsfråga.",
+            "Dina bästisar bor i olika städer men det spelar ingen roll. Du är den som håller ihop folk, alltid."
+        ];
+
+        let remaining = [...reasons];
+        const resultText = document.getElementById('reasonText');
+
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        remaining = shuffle(remaining);
+
+        function showReason() {
+            if (remaining.length === 0) {
+                remaining = shuffle([...reasons]);
+            }
+
+            const reason = remaining.pop();
+
+            resultText.classList.remove('visible');
+
+            setTimeout(() => {
+                resultText.textContent = reason;
+                resultText.classList.add('visible');
+            }, 150);
+
+            burstConfetti();
+        }
+
+        function burstConfetti() {
+            const colors = ['#ff6b9d', '#c44dff', '#ff85c8', '#ffd700', '#ff4081', '#e040fb', '#ff80ab'];
+            const shapes = ['circle', 'square', 'heart'];
+
+            for (let i = 0; i < 25; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti';
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+
+                if (shape === 'heart') {
+                    el.innerHTML = '\u2764';
+                    el.style.fontSize = (8 + Math.random() * 12) + 'px';
+                    el.style.color = color;
+                    el.style.background = 'none';
+                } else {
+                    el.style.background = color;
+                    el.style.borderRadius = shape === 'circle' ? '50%' : '2px';
+                    el.style.width = (6 + Math.random() * 8) + 'px';
+                    el.style.height = (6 + Math.random() * 8) + 'px';
+                }
+
+                const startX = window.innerWidth / 2;
+                const startY = window.innerHeight / 2;
+                el.style.left = startX + 'px';
+                el.style.top = startY + 'px';
+
+                const angle = (Math.PI * 2 * i) / 25;
+                const velocity = 100 + Math.random() * 250;
+                const x = Math.cos(angle) * velocity;
+                const y = Math.sin(angle) * velocity - 50;
+
+                el.style.setProperty('--x', x + 'px');
+                el.style.setProperty('--y', y + 'px');
+                el.style.animation = `confettiFall ${0.8 + Math.random() * 0.6}s ease-out forwards`;
+
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1500);
+            }
+        }
+
+        // Create sparkle particles
+        function createSparkles() {
+            const sparkleColors = ['#ffd700', '#ff69b4', '#ffffff', '#ffb6c1', '#dda0dd', '#f0e68c'];
+            for (let i = 0; i < 30; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + 'vw';
+                sparkle.style.background = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+                sparkle.style.width = (3 + Math.random() * 5) + 'px';
+                sparkle.style.height = sparkle.style.width;
+                sparkle.style.animationDuration = (5 + Math.random() * 10) + 's';
+                sparkle.style.animationDelay = Math.random() * 10 + 's';
+                document.body.appendChild(sparkle);
+            }
+        }
+
+        // Floating hearts decoration
+        function createHearts() {
+            const positions = [
+                { left: '5%', top: '10%' }, { right: '8%', top: '15%' },
+                { left: '10%', bottom: '20%' }, { right: '5%', bottom: '25%' },
+                { left: '15%', top: '50%' }, { right: '12%', top: '45%' },
+            ];
+            positions.forEach((pos, i) => {
+                const heart = document.createElement('div');
+                heart.className = 'heart-deco';
+                heart.textContent = '\u2764\ufe0f';
+                Object.entries(pos).forEach(([k, v]) => heart.style[k] = v);
+                heart.style.animationDelay = (i * 0.8) + 's';
+                heart.style.fontSize = (16 + Math.random() * 16) + 'px';
+                document.body.appendChild(heart);
+            });
+        }
+
+        createSparkles();
+        createHearts();
+    </script>
+</body>
+</html>
